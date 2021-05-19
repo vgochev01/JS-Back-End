@@ -6,7 +6,7 @@ module.exports = (req, res) => {
 
     form.parse(req, (err, fields, files) => {
         if(err != null) { /* handle error */ }
-        database.push({name: fields.name, serial: fields.serial});
+        database.addItem(fields);
         res.writeHead(301, {
             'Location': '/catalog'
         });
