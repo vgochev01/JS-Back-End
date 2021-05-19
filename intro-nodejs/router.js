@@ -10,7 +10,7 @@ function match(url){
     }
 }
 
-function registerHandler(url, handler){
+function registerHandler(method, url, handler){
     handlers[url] = handler;
 }
 
@@ -20,4 +20,9 @@ function defaultHandler(req, res){
     res.end();
 }
 
-module.exports = { match, registerHandler };
+module.exports = { 
+    match, 
+    get: (...params) => registerHandler('GET', ...params),
+    post: (...params) => registerHandler('POST', ...params),
+    registerHandler 
+};

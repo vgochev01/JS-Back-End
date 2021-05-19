@@ -4,12 +4,16 @@ const router = require('./router');
 
 const homeController = require('./controllers/homeController');
 const aboutController = require('./controllers/aboutController');
+const catalogController = require('./controllers/catalogController');
+const createController = require('./controllers/createController');
+
+router.get('/', homeController);
+router.get('/about', aboutController);
+router.get('/catalog', catalogController);
+router.post('/create', createController);
 
 const port = 3030;
 const server = http.createServer(requestHandler);
-
-router.registerHandler('/', homeController);
-router.registerHandler('/about', aboutController);
 
 function requestHandler(req, res){
     console.log('>>>', req.method, req.url);
