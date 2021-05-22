@@ -1,7 +1,6 @@
-const layout = (html, title = 'Home') => `
 <html>
     <head>
-        <title>My Page - ${title}</title>
+        <title>My Page - {{title}}</title>
     </head>
     <nav>
         <a href='/'>Home</a>
@@ -9,9 +8,6 @@ const layout = (html, title = 'Home') => `
         <a href='/about'>About</a>
     </nav>
     <body>
-        ${html}
+        {{body}}
     </body>
 </html>
-`;
-
-module.exports = layout;
