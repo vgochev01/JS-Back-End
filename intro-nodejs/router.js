@@ -1,8 +1,14 @@
+const staticController = require("./controllers/staticController");
+
 let handlers = {};
 
 function match(method, url){
     const urlMethods = handlers[url] || {};
     const handler = urlMethods[method];
+
+    if(method == 'GET' && url.startsWith('/static/')){
+        return staticController;
+    }
 
     if(handler == undefined){
         return defaultHandler;

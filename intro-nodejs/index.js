@@ -8,6 +8,7 @@ const aboutController = require('./controllers/aboutController');
 const catalogController = require('./controllers/catalogController');
 const createController = require('./controllers/createController');
 const deleteHandler = require('./controllers/deleteHandler');
+const staticController = require('./controllers/staticController');
 
 router.get('/', homeController);
 router.get('/about', aboutController);
