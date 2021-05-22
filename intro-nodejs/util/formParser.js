@@ -1,5 +1,3 @@
-const fs = require('fs');
-
 async function parseForm(req){
     return new Promise((resolve, reject) => {
         let body = '';
