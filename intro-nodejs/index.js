@@ -9,12 +9,14 @@ const catalogController = require('./controllers/catalogController');
 const createController = require('./controllers/createController');
 const deleteHandler = require('./controllers/deleteHandler');
 const staticController = require('./controllers/staticController');
+const uploadController = require('./controllers/uploadController');
 
 router.get('/', homeController);
 router.get('/about', aboutController);
 router.get('/catalog', catalogController);
 router.post('/create', createController);
 router.get('/delete', deleteHandler);
+router.post('/upload', uploadController);
 
 const port = 3030;
 const server = http.createServer(requestHandler);

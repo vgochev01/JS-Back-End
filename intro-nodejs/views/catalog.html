@@ -8,4 +8,8 @@
     <ul>
         {{items}}
     </ul>
+    <form method='POST' action='/upload' enctype="multipart/form-data">
+        <input type="file" name="filetoupload">
+        <input type="submit" value="Upload">
+    </form>
 </div>
