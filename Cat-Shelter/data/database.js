@@ -1,39 +1,57 @@
-const database = {
-    breeds: [],
-    cats: {
-        '3423432': {
-            img: 'https://cdn.pixabay.com/photo/2015/06/19/14/20/cat-814952_1280.jpg',
-            alt: 'some cat',
-            description: 'cool cat by valeri',
-            breed: 'siam',
-            id: '3423432'
-        }
-    }
-};
+const fs = require('fs');
 
-function generateId(){
+async function getData(filename){
+    return new Promise((resolve, reject) => {
+        const data = fs.createReadStream(`./data/${filename}.json`);
+        let breeds = '';
+        data.on('error', (err) => reject(err));
+        data.on('data', data => breeds += data);
+        data.on('end', () => {
+            resolve(breeds);
+        });
+    });
+}
+
+async function generateId(){
+
+    const data = await getData('cats');
+    const cats = JSON.parse(data);
+
     let id;
     do {
         id = ('00000000' + (Math.random() * 99999999 | 0).toString(16)).slice(-8);
-    } while(database.cats[id] != undefined);
+    } while(cats[id] != undefined);
+    return id;
 }
 
-function addBreed(breed){
-    if(database.breeds.includes(breed) == false){
-        database.breeds.push(breed);
-    } else {
-        // do something
+async function addBreed(breed){
+    const data = await getData('breeds');
+    const breeds = JSON.parse(data);
+
+    if(breeds.includes(breed) == false){
+        breeds.push(breed);
+        const stream = fs.createWriteStream('./data/breeds.json');
+        stream.write(JSON.stringify(breeds));
+        stream.on('error', (err) => console.log(err));
     }
 }
 
-function addCat(catObj){
-    const id = generateId();
+async function addCat(catObj){
+    const id = await generateId();
     catObj.id = id;
-    database.cats[id] = catObj;
+
+    const data = await getData('cats');
+    const cats = JSON.parse(data);
+    
+    cats[id] = catObj;
+    const stream = fs.createWriteStream('./data/cats.json');
+    stream.write(JSON.stringify(cats));
+    stream.on('error', (err) => console.log(err));
 }
 
 module.exports = {
-    database,
     addBreed,
-    addCat
+    addCat,
+    getCats: () => getData('cats'),
+    getBreeds: () => getData('breeds')
 }

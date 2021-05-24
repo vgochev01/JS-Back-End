@@ -1,7 +1,7 @@
 module.exports = (catObj) => `
 <li>
-    <img src="${catObj.img}" alt="${catObj.alt}">
-    <h3></h3>
+    <img src="${catObj.img}" alt="${catObj.name}">
+    <h3>${catObj.name}</h3>
     <p><span>Breed: </span>${catObj.breed}</p>
     <p><span>Description: </span>${catObj.description}</p>
     <ul class="buttons">
