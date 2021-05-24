@@ -1,16 +1,17 @@
 const database = require('../data/database');
-const formParser = require('../util/formParser');
 const { loadTemplate } = require('../util/template');
+const formidable = require('formidable');
 
 async function addBreed(req, res){
-    const data = await formParser(req);
-    const breed = data.breed;
-    database.addBreed(breed);
-    res.writeHead(301, {
-        'Location': '/'
-    });
-    res.end();
-    console.log(database.database.breeds);
+    const form = new formidable.IncomingForm();
+    form.parse(req, (err, fields) => {
+        const breed = fields.breed;
+        database.addBreed(breed);
+        res.writeHead(301, {
+            'Location': '/'
+        });
+        res.end();
+    })
 }
 
 async function renderPage(req, res){

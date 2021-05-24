@@ -3,11 +3,11 @@ const fs = require('fs');
 async function getData(filename){
     return new Promise((resolve, reject) => {
         const data = fs.createReadStream(`./data/${filename}.json`);
-        let breeds = '';
+        let fetchedData = '';
         data.on('error', (err) => reject(err));
-        data.on('data', data => breeds += data);
+        data.on('data', data => fetchedData += data);
         data.on('end', () => {
-            resolve(breeds);
+            resolve(fetchedData);
         });
     });
 }

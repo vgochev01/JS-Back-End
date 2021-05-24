@@ -1,7 +1,13 @@
+const staticController = require("./controllers/staticController");
+
 let handlers = {};
 
 function match(method, url){
     const urlMethods = handlers[url] || {};
+
+    if(url.startsWith('/content/')){
+        return staticController;
+    }
 
     if(urlMethods[method] == undefined){
         return (req, res) => {
