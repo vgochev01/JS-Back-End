@@ -1,6 +1,7 @@
 const http = require('http');
 const addBreedController = require('./controllers/addBreedController');
 const addCatController = require('./controllers/addCatController');
+const editController = require('./controllers/editController');
 const homeController = require('./controllers/homeController');
 const router = require('./router');
 

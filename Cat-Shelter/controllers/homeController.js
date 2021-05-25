@@ -5,8 +5,7 @@ const { addCat } = require("../data/database");
 
 module.exports = async (req, res) => {
     let html = await loadTemplate('index');
-    const data = await database.getCats();
-    const cats = JSON.parse(data);
+    const cats = await database.getCats();
 
     html = html.replace('{{cats}}', Object.values(cats).map(catTemplate).join(''));
 

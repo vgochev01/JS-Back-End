@@ -7,7 +7,7 @@ async function getData(filename){
         data.on('error', (err) => reject(err));
         data.on('data', data => fetchedData += data);
         data.on('end', () => {
-            resolve(fetchedData);
+            resolve(JSON.parse(fetchedData));
         });
     });
 }
@@ -40,9 +40,16 @@ async function addCat(catObj){
     const id = await generateId();
     catObj.id = id;
 
-    const data = await getData('cats');
-    const cats = JSON.parse(data);
+    const cats = await getData('cats');
     
+    cats[id] = catObj;
+    const stream = fs.createWriteStream('./data/cats.json');
+    stream.write(JSON.stringify(cats));
+    stream.on('error', (err) => console.log(err));
+}
+
+async function editCat(id, catObj){
+    const cats = await getData('cats');
     cats[id] = catObj;
     const stream = fs.createWriteStream('./data/cats.json');
     stream.write(JSON.stringify(cats));
@@ -52,6 +59,7 @@ async function addCat(catObj){
 module.exports = {
     addBreed,
     addCat,
+    editCat,
     getCats: () => getData('cats'),
     getBreeds: () => getData('breeds')
 }

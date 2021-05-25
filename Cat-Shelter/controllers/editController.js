@@ -1,14 +1,16 @@
-const fs = require('fs/promises');
-const database = require('../data/database');
-const breedSelectTemplate = require('../util/breedSelectTemplate');
+const { getCats } = require("../data/database");
+const editTemplate = require("../util/editTemplate");
+const { loadTemplate } = require("../util/template");
 const formidable = require('formidable');
-const { loadTemplate } = require('../util/template');
+const database = require("../data/database");
+const fs = require('fs/promises');
 
-async function addCat(req, res){
+async function editCat(req, res) {
+    const id = req.url.slice(6);
     const form = new formidable.IncomingForm();
 
     form.parse(req, async (err, fields, files) => {
-        if(err != null) {
+        if(err != null) { 
             // handle error
         }
 
@@ -19,9 +21,9 @@ async function addCat(req, res){
         const newPath = './content/images/cats/' + filename;
         await fs.rename(oldPath, newPath);
 
-        const catObj = { name, description, breed, img: newPath };
+        const catObj = { name, description, breed, img: newPath, id };
 
-        database.addCat(catObj);
+        database.editCat(id, catObj);
 
         res.writeHead(301, {
             'Location': '/'
@@ -31,11 +33,12 @@ async function addCat(req, res){
 }
 
 async function renderPage(req, res){
-    let html = await loadTemplate('addCat');
+    const id = req.url.slice(6);
+    const cats = await getCats();
 
-    const breeds = await database.getBreeds();
-
-    html = html.replace('{{breeds}}', breedSelectTemplate(breeds));
+    let html = await loadTemplate('editCat');
+    
+    html = html.replace('{{editForm}}', await editTemplate(cats[id]));
 
     res.writeHead(200, {
         'Content-Type': 'text/html'
@@ -45,6 +48,6 @@ async function renderPage(req, res){
 }
 
 module.exports = {
-    renderPage,
-    addCat
+    editCat,
+    renderPage
 }

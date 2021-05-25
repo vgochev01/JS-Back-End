@@ -1,3 +1,4 @@
+const editController = require("./controllers/editController");
 const staticController = require("./controllers/staticController");
 
 let handlers = {};
@@ -7,6 +8,14 @@ function match(method, url){
 
     if(url.startsWith('/content/')){
         return staticController;
+    }
+
+    if(url.startsWith('/edit/')){
+        if(method == 'GET'){
+            return editController.renderPage;
+        } else if(method == 'POST'){
+            return editController.editCat;
+        }
     }
 
     if(urlMethods[method] == undefined){
