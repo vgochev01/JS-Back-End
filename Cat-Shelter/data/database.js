@@ -14,8 +14,7 @@ async function getData(filename){
 
 async function generateId(){
 
-    const data = await getData('cats');
-    const cats = JSON.parse(data);
+    const cats = await getData('cats');
 
     let id;
     do {
@@ -25,8 +24,7 @@ async function generateId(){
 }
 
 async function addBreed(breed){
-    const data = await getData('breeds');
-    const breeds = JSON.parse(data);
+    const breeds = await getData('breeds');
 
     if(breeds.includes(breed) == false){
         breeds.push(breed);
@@ -43,16 +41,24 @@ async function addCat(catObj){
     const cats = await getData('cats');
     
     cats[id] = catObj;
-    const stream = fs.createWriteStream('./data/cats.json');
-    stream.write(JSON.stringify(cats));
-    stream.on('error', (err) => console.log(err));
+    modifyCats(cats);
 }
 
 async function editCat(id, catObj){
     const cats = await getData('cats');
     cats[id] = catObj;
+    modifyCats(cats);
+}
+
+async function deleteCat(id){
+    const cats = await getData('cats');
+    delete cats[id];
+    modifyCats(cats);
+}
+
+function modifyCats(data){
     const stream = fs.createWriteStream('./data/cats.json');
-    stream.write(JSON.stringify(cats));
+    stream.write(JSON.stringify(data));
     stream.on('error', (err) => console.log(err));
 }
 
@@ -60,6 +66,7 @@ module.exports = {
     addBreed,
     addCat,
     editCat,
+    deleteCat,
     getCats: () => getData('cats'),
     getBreeds: () => getData('breeds')
 }

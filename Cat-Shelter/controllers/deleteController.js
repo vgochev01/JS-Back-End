@@ -4,18 +4,30 @@ const { loadTemplate } = require("../util/template");
 const formidable = require('formidable');
 const database = require("../data/database");
 const fs = require('fs/promises');
+const deleteTemplate = require("../util/deleteTemplate");
+const defaultController = require("./defaultController");
 
 async function deleteCat(req, res) {
-    const id = req.url.slice();
+    const id = req.url.slice(11);
+    database.deleteCat(id);
+
+    res.writeHead(301, {
+        'Location': '/'
+    });
+    res.end();
 }
 
 async function renderPage(req, res){
-    const id = req.url.slice(6);
+    const id = req.url.slice(11);
     const cats = await getCats();
 
-    let html = await loadTemplate('editCat');
-    
-    html = html.replace('{{editForm}}', await editTemplate(cats[id]));
+    if(cats[id] == undefined){
+        defaultController(req, res);
+        return;
+    }
+
+    let html = await loadTemplate('catShelter');
+    html = html.replace('{{template}}', deleteTemplate(cats[id]));
 
     res.writeHead(200, {
         'Content-Type': 'text/html'

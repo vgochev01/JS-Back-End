@@ -6,12 +6,21 @@ async function addBreed(req, res){
     const form = new formidable.IncomingForm();
     form.parse(req, (err, fields) => {
         const breed = fields.breed;
+        
+        if(breed == ''){
+            return redir('/add/breed');
+        }
+
         database.addBreed(breed);
+        redir('/')
+    })
+
+    function redir(location){
         res.writeHead(301, {
-            'Location': '/'
+            'Location': location
         });
         res.end();
-    })
+    }
 }
 
 async function renderPage(req, res){

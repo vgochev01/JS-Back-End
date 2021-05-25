@@ -3,6 +3,7 @@ const addBreedController = require('./controllers/addBreedController');
 const addCatController = require('./controllers/addCatController');
 const editController = require('./controllers/editController');
 const homeController = require('./controllers/homeController');
+const searchController = require('./controllers/searchController');
 const router = require('./router');
 
 const server = http.createServer(requestHandler);
@@ -13,7 +14,7 @@ router.get('/add/breed', addBreedController.renderPage);
 router.post('/add/breed', addBreedController.addBreed);
 router.get('/add/cat', addCatController.renderPage);
 router.post('/add/cat', addCatController.addCat);
-router.post('/search', )
+router.post('/search', searchController);
 
 function requestHandler(req, res){
     const method = req.method;

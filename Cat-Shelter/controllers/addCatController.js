@@ -13,7 +13,6 @@ async function addCat(req, res){
         }
 
         const { name, description, breed } = fields;
-
         const oldPath = files['upload'].path;
         const filename = files['upload'].name;
         const newPath = './content/images/cats/' + filename;

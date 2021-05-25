@@ -4,6 +4,8 @@ const { loadTemplate } = require("../util/template");
 const formidable = require('formidable');
 const database = require("../data/database");
 const fs = require('fs/promises');
+const defaultController = require("./defaultController");
+//const { defaultHandler } = require("../router");
 
 async function editCat(req, res) {
     const id = req.url.slice(6);
@@ -36,8 +38,12 @@ async function renderPage(req, res){
     const id = req.url.slice(6);
     const cats = await getCats();
 
+    if(cats[id] == undefined){
+        defaultController(req, res);
+        return;
+    }
+
     let html = await loadTemplate('editCat');
-    
     html = html.replace('{{editForm}}', await editTemplate(cats[id]));
 
     res.writeHead(200, {
