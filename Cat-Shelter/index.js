@@ -13,6 +13,7 @@ router.get('/add/breed', addBreedController.renderPage);
 router.post('/add/breed', addBreedController.addBreed);
 router.get('/add/cat', addCatController.renderPage);
 router.post('/add/cat', addCatController.addCat);
+router.post('/search', )
 
 function requestHandler(req, res){
     const method = req.method;
