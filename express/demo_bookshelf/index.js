@@ -15,6 +15,7 @@ async function start(){
 
     app.use(logger);
     app.use('/static', express.static('static'));
+    app.use(express.urlencoded({ extended: true }));
 
     app.use(await init());
 

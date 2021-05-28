@@ -1,3 +1,4 @@
 module.exports = (req, res) => {
-    res.render('home');
+    const ctx = { title: 'Home' }
+    res.render('home', ctx);
 }

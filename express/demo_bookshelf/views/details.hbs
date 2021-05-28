@@ -3,7 +3,7 @@
         <h2>{{title}}</h2> <h4>By Author: {{author}}</h4>
         <div class="details-links">
             <a href="/edit/{{id}}">Edit</a>
-            <a href="/delete/{{id}}">Delete</a>
+            <a onclick="fetch('http://localhost:3000/catalog/{{id}}', { method: 'DELETE' }); window.location.pathname = '/catalog';" href="javascript:void(0)">Delete</a>
         </div>
     </div>
 </div>
