@@ -9,6 +9,7 @@ async function init() {
             getBooks,
             getBookById,
             addBook,
+            editBook,
             deleteBook
         }
         next();
@@ -26,6 +27,11 @@ function getBookById(id){
 function addBook(book){
     const id = generateId();
     book['id'] = id;
+    data[id] = book;
+    saveData();
+}
+
+function editBook(id, book){
     data[id] = book;
     saveData();
 }

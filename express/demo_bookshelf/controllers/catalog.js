@@ -23,6 +23,23 @@ router.post('/create', (req, res) => {
     }
 });
 
+router.get('/edit/:id', (req, res) => {
+    const { id } = req.params;
+    const book = req.storage.getBookById(id);
+    res.render('edit', book);
+});
+
+router.post('/edit/:id', (req, res) => {
+    const id = req.params.id;
+    const { title, author } = req.body;
+    if(title && author) {
+        req.storage.editBook(id, { id, title, author });
+        res.redirect('/catalog');
+    } else {
+        res.redirect('/catalog/edit/' + id);
+    }
+});
+
 router.get('/:id', (req, res) => {
     const { id } = req.params;
     const book = req.storage.getBookById(id);
