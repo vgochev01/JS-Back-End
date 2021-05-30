@@ -237,6 +237,11 @@ footer {
     font-size: 20px;
 }
 
+
+.emptyMsg a {
+    color: rgb(246, 113, 113);
+}
+
 /*Animations & Transitions
 */
 
