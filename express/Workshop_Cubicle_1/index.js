@@ -2,7 +2,8 @@ const express = require('express');
 const hbs = require('express-handlebars');
 
 const { catalog } = require('./controllers/catalog');
-const { create, post } = require('./controllers/create');
+const { create, post: createPost } = require('./controllers/create');
+const { edit, post: editPost } = require('./controllers/edit');
 const { about } = require('./controllers/about');
 const { details } = require('./controllers/details');
 const { notFound } = require('./controllers/notFound');
@@ -28,7 +29,9 @@ async function start(){
     app.get('/details/:id', details);
     app.get('/about', about);
     app.get('/create', create);
-    app.post('/create', post);
+    app.post('/create', createPost);
+    app.get('/edit/:id', edit);
+    app.post('/edit/:id', editPost);
 
     app.all('*', notFound);
 
