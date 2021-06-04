@@ -4,7 +4,7 @@ const { edit, post: editPost } = require("../controllers/edit");
 const { about } = require("../controllers/about");
 const { details } = require("../controllers/details");
 const { notFound } = require("../controllers/notFound");
-const { init } = require("../models/database");
+const { init } = require("./storage");
 
 module.exports = async (app) => {
   app.use(await init());

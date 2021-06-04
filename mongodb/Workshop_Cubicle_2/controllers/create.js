@@ -12,7 +12,7 @@ module.exports = {
             imageUrl: req.body.imageUrl,
             difficulty: Number(req.body.difficulty)
         };
-
+        
         await req.storage.create(cube);
 
         res.redirect('/');
