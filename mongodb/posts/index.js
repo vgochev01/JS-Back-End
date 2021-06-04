@@ -13,21 +13,9 @@ async function start(){
         useUnifiedTopology: true
     });
 
-    const person = await Person.findOne({ firstName: 'Rado' });
+    //const person = await Person.findOne({ firstName: 'Rado' });
 
     const post = await Post.findOne({}).populate('author');
 
-    const comment = new Comment({
-        author: person,
-        post,
-        content: 'This post is amazing!!!'
-    });
-
-    await comment.save();
-
-    post.comments.push(comment);
-
-    await post.save();
-
-    console.log('Successfuly created comment and added it to the post!');
+    console.log(post);
 }
