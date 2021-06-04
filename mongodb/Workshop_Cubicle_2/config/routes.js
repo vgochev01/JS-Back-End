@@ -6,8 +6,8 @@ const { details } = require("../controllers/details");
 const { notFound } = require("../controllers/notFound");
 const { init } = require("./storage");
 
-module.exports = async (app) => {
-  app.use(await init());
+module.exports = (app) => {
+  app.use(init());
 
   app.get("/", catalog);
   app.get("/details/:id", details);

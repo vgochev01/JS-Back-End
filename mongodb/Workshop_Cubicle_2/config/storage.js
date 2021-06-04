@@ -1,14 +1,6 @@
-const fs = require('fs/promises');
 const Cube = require('../models/Cube');
 
-let data = {};
-
-async function init(){
-    try{
-        data = JSON.parse(await fs.readFile('./models/data.json'));
-    } catch (err) {
-        console.error('Error reading database');
-    }
+function init(){
     return (req, res, next) => {
         req.storage = {
             getAll,
@@ -21,8 +13,22 @@ async function init(){
 }
 
 async function getAll(query){
-    const cubes = Cube.find({}).lean();
-    console.log(cubes);
+    const options = {};
+
+    if(query.search) {
+        options.name = { $regex: query.search, $options: 'i' };
+    }
+
+    if(query.from) {
+        options.difficulty = { $gte: query.from };
+    }
+
+    if(query.to){
+        options.difficulty = options.difficulty || {};
+        options.difficulty.$lte = query.to;
+    }
+
+    const cubes = Cube.find(options).lean();
     return cubes;
 }
 
