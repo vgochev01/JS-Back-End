@@ -242,6 +242,40 @@ footer {
     color: rgb(246, 113, 113);
 }
 
+.comment-form {
+    margin-top: 40px;
+}
+
+.comments {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.comment {
+    width: 100%;
+    margin-top: 20px;
+}
+
+.comment:nth-child(1){
+    margin-top: 0;
+}
+
+.comment header {
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 20px;
+}
+
+.comment article {
+    text-align: center;
+}
+
 /*Animations & Transitions
 */
 
