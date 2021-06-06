@@ -10,6 +10,37 @@
   <p><span>Difficulty level:</span> {{difficulty}}</p>
   <a class="btn" href="/">Back</a>
   <a class="btn" href="/edit/{{_id}}">Edit</a>
+  <a class="btn" href="/attach/{{_id}}">Attach</a>
+
+  {{!-- ACCESSORIES --}}
+
+  <h2>Accessories</h2>
+  <div class="accessories">
+      <!--<div class="accessory">
+          <img src="https://images-na.ssl-images-amazon.com/images/I/61J8UP8pySL._SX425_.jpg" alt="stickerName">
+          <h3>Accessory Name</h3>
+          <p>Accessory Description</p>
+      </div>
+      <div class="accessory">
+          <img src="https://images-na.ssl-images-amazon.com/images/I/61J8UP8pySL._SX425_.jpg" alt="stickerName">
+          <h3>Accessory Name</h3>
+          <p>Accessory Description</p>
+      </div>
+      <div class="accessory">
+          <img src="https://images-na.ssl-images-amazon.com/images/I/61J8UP8pySL._SX425_.jpg" alt="stickerName">
+          <h3>Accessory Name</h3>
+          <p>Accessory Description</p>
+      </div>
+      -->
+      {{#each accessories}}
+      {{> accessory}}
+      {{else}}
+      <h3 class="italic">This cube has no accessories yet...</h3>
+      {{/each}}
+  </div>
+
+    {{!-- COMMENTS --}}
+    
   <div>
     <h2 style="text-align: center;">Comments</h2>
     <form class="comment-form" action="/comments/{{_id}}" method="POST">
@@ -20,7 +51,6 @@
       <input type="submit" value="Post">
     </form>
   </div>
-  {{!-- COMMENTS --}}
   <div class="comments">
   {{#each comments}}
     {{> comment}}

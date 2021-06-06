@@ -6,6 +6,7 @@ const { about } = require("../controllers/about");
 const { details } = require("../controllers/details");
 const { notFound } = require("../controllers/notFound");
 const { init } = require("./storage");
+const { createAccessory, accessoryPost } = require("../controllers/accessories");
 
 module.exports = (app) => {
   app.use(init());
@@ -21,6 +22,9 @@ module.exports = (app) => {
   app.post("/edit/:id", editPost);
 
   app.post("/comments/:cubeId", commentPost);
+
+  app.get('/accessory/create', createAccessory);
+  app.post('/accessory/create', accessoryPost);
 
   app.all("*", notFound);
 };
