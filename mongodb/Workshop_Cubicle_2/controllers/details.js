@@ -2,7 +2,7 @@ module.exports = {
     async details(req, res){
         const { id } = req.params;
         const cube = await req.storage.getById(id);
-        console.log(cube);
+
         if(cube == undefined){
             return res.redirect('/404');
         } else {
@@ -17,11 +17,11 @@ module.exports = {
     async attach(req, res) {
         const { cubeId } = req.params;
         const cube = await req.storage.getById(cubeId);
-        const accessories = await req.storage.getAccessories(cube.accessories);
-
+        
         if(cube == undefined){
             return res.redirect('/404');
         } else {
+            const accessories = await req.storage.getAccessories(cube.accessories);
             const ctx = {
                 title: 'Cube Details',
                 cube,

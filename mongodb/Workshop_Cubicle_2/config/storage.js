@@ -39,10 +39,14 @@ async function getAll(query){
 }
 
 async function getById(id){
-    const cube = await Cube.findById(id).populate('comments').populate('accessories').lean();
-    if(cube) {
-        return cube;
-    } else {
+    try{
+        const cube = await Cube.findById(id).populate('comments').populate('accessories').lean();
+        if(cube) {
+            return cube;
+        } else {
+            throw new Error();
+        }
+    } catch (err){
         return undefined;
     }
 }
