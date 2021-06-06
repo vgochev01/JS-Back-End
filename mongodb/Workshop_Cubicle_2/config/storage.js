@@ -10,7 +10,9 @@ function init(){
             create,
             edit,
             newComment,
-            createAccessory
+            createAccessory,
+            getAccessories,
+            attachAccessory
         };
         next();
     }
@@ -37,7 +39,7 @@ async function getAll(query){
 }
 
 async function getById(id){
-    const cube = await Cube.findById(id).populate('comments').lean();
+    const cube = await Cube.findById(id).populate('comments').populate('accessories').lean();
     if(cube) {
         return cube;
     } else {
@@ -76,6 +78,22 @@ async function newComment(id, comment){
     await cube.save();
 }
 
+async function getAccessories(existing){
+    return Accessory.find({ _id: { $nin: existing } }).lean();
+}
+
+async function attachAccessory(cubeId, accessoryId){
+    const cube = await Cube.findById(cubeId);
+    const accessory = await Accessory.findById(accessoryId);
+
+    if(!cube || !accessory){
+        throw new ReferenceError('No Such ID in database!');
+    }
+
+    cube.accessories.push(accessory);
+    return cube.save();
+}
+
 async function createAccessory(accessory){
     const record = new Accessory(accessory);
     return record.save();
@@ -88,5 +106,7 @@ module.exports = {
     create,
     edit,
     newComment,
-    createAccessory
+    createAccessory,
+    getAccessories,
+    attachAccessory
 };
