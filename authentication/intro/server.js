@@ -1,4 +1,5 @@
 const express = require('express');
+const cookieParser = require('cookie-parser');
 
 const app = express();
 
@@ -6,9 +7,9 @@ const sessions = {};
 
 function mySessionStorage(req, res, next){
     let session = {};
+    const sessionId = req.cookies.sessionId;
 
-    if(req.headers.cookie){
-        const sessionId = req.headers.cookie.split('=')[1];
+    if(sessionId){
         if(sessions[sessionId] == undefined){
             console.log('Invalid session id, generating new one!');
             createSession();
@@ -28,11 +29,12 @@ function mySessionStorage(req, res, next){
         const id = ('00000000' + (Math.random() * 99999999).toString(16)).slice(-8);
         session.visited = 0;
         sessions[id] = session;
-        res.setHeader('Set-Cookie', `sessionId=${id}`);
+        res.cookie('sessionId', id);
         console.log('Generated new session with ID: ' + id);
     }
 }
 
+app.use(cookieParser());
 app.use(mySessionStorage);
 
 app.get('/', (req, res) => {
