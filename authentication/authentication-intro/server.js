@@ -1,11 +1,9 @@
 const express = require('express');
 const expressSession = require('express-session');
-const bcrypt = require('bcrypt');
 const routes = require('./routes');
+const auth = require('./auth');
 
 const app = express();
-
-const users = {};
 
 app.use(expressSession({
     secret: 'my random secret',
@@ -15,21 +13,18 @@ app.use(expressSession({
 }));
 
 app.use(express.urlencoded({ extended: false }));
+app.use(auth);
 
 routes(app);
 
 app.post('/register', async (req, res) => {
     if(req.body.password == req.body.repass){
-        const id = ('00000000' + (Math.random() * 99999999 | 0).toString(16)).slice(-8);
-
-        const hashedPass = await bcrypt.hash(req.body.password, 8);
-    
-        users[id] = {
-            username: req.body.username,
-            password: hashedPass
-        };
-    
-        res.redirect('/login');
+        try{
+            await req.auth.register(req.body.username, req.body.password);
+            res.redirect('/login');
+        } catch (err) {
+            res.send(err.message);
+        }
     } else {
         res.send('Both passwords must match! <a href="/register">Back to register page');
     }
@@ -37,22 +32,13 @@ app.post('/register', async (req, res) => {
 
 app.post('/login', async (req, res) => {
     const username = req.body.username;
+    const password = req.body.password;
 
-    const user = Object.entries(users).find(([id, u]) => u.username == username);
-
-    if(user){
-        const passwordsMatch = await bcrypt.compare(req.body.password, user[1].password);
-        if(passwordsMatch){
-            req.session.user = {
-                _id: user[0],
-                username
-            };
-            res.redirect('/');
-        } else {
-            res.send('Wrong password! <a href="/login">Back to login page</a>');
-        }
-    } else {
-        res.send('There is no user with that username! <a href="/login">Back to login page</a>');
+    try {
+        await req.auth.login(username, password, req.session);
+        res.redirect('/');
+    } catch (err) {
+        res.send(err.message);
     }
 });
 
