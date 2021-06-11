@@ -6,7 +6,7 @@
     src="{{cube.imageUrl}}"
   />
   {{#if accessories}}
-  <form action="/details/{{cube._id}}/attach" method="POST">
+  <form action="/accessory/attach/{{cube._id}}" method="POST">
     <label for="accessory">Accessories</label>
     <select id="accessory" name="accessory">
       {{#each accessories}}

@@ -2,9 +2,9 @@ const { post: commentPost } = require("../controllers/comments");
 const { about } = require("../controllers/about");
 const { notFound } = require("../controllers/notFound");
 const { init } = require("./storage");
-const { createAccessory, accessoryPost } = require("../controllers/accessories");
 
 const productController = require('../controllers/productController');
+const accessoryController = require('../controllers/accessoryController');
 
 module.exports = (app) => {
   app.use(init());
@@ -12,16 +12,11 @@ module.exports = (app) => {
   app.get('/', (req, res) => res.redirect('/products'));
   
   app.use('/products', productController);
+  app.use('/accessory', accessoryController);
 
   app.get("/about", about);
 
   app.post("/comments/:cubeId", commentPost);
-
-  app.get('/accessory/create', createAccessory);
-  app.post('/accessory/create', accessoryPost);
-
-  // app.get('/details/:cubeId/attach', attach);
-  // app.post('/details/:cubeId/attach', attachPost);
 
   app.all("*", notFound);
 };
