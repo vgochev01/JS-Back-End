@@ -1,0 +1,62 @@
+{{#with cube}}
+<h1>{{name}}</h1>
+<img
+  class="cube"
+  src="{{imageUrl}}"
+/>
+<div class="details">
+  <p><span>Description:</span>
+    {{description}}
+  <p><span>Difficulty level:</span> {{difficulty}}</p>
+  <a class="btn" href="/products">Back</a>
+  <a class="btn" href="/products/edit/{{_id}}">Edit</a>
+  <a class="btn" href="/products/details/{{_id}}/attach">Attach</a>
+
+  {{!-- ACCESSORIES --}}
+
+  <h2>Accessories</h2>
+  <div class="accessories">
+      <!--<div class="accessory">
+          <img src="https://images-na.ssl-images-amazon.com/images/I/61J8UP8pySL._SX425_.jpg" alt="stickerName">
+          <h3>Accessory Name</h3>
+          <p>Accessory Description</p>
+      </div>
+      <div class="accessory">
+          <img src="https://images-na.ssl-images-amazon.com/images/I/61J8UP8pySL._SX425_.jpg" alt="stickerName">
+          <h3>Accessory Name</h3>
+          <p>Accessory Description</p>
+      </div>
+      <div class="accessory">
+          <img src="https://images-na.ssl-images-amazon.com/images/I/61J8UP8pySL._SX425_.jpg" alt="stickerName">
+          <h3>Accessory Name</h3>
+          <p>Accessory Description</p>
+      </div>
+      -->
+      {{#each accessories}}
+      {{> accessory}}
+      {{else}}
+      <h3 class="italic">This cube has no accessories yet...</h3>
+      {{/each}}
+  </div>
+
+    {{!-- COMMENTS --}}
+    
+  <div>
+    <h2 style="text-align: center;">Comments</h2>
+    <form class="comment-form" action="/comments/{{_id}}" method="POST">
+      <label for="author">Your Name:</label>
+      <input id="author" type="text" name="author" />
+      <label for="content">Comment:</label>
+      <textarea id="content" placeholder="Your comment..." name="content"></textarea>
+      <input type="submit" value="Post">
+    </form>
+  </div>
+  <div class="comments">
+  {{#each comments}}
+    {{> comment}}
+  {{else}}
+    <span style="font-style: italic;">No comments for this cube.</span>
+  {{/each}}
+  </div>
+</div>
+{{/with}}
