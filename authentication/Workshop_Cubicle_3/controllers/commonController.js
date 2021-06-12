@@ -9,7 +9,7 @@ router.get('/about', (req, res) => {
     res.render('about');
 });
 
-router.get('/comments/:cubeId', async (req, res) => {
+router.post('/comments/:cubeId', async (req, res) => {
     const { cubeId } = req.params;
     const comment = {
         author: req.body.author,
