@@ -1,5 +1,6 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const { COOKIE_NAME, TOKEN_SECRET } = require('../config');
 const userService = require('../services/user');
 
 module.exports = () => (req, res, next) => {
@@ -7,8 +8,10 @@ module.exports = () => (req, res, next) => {
         register,
         login
     };
-
-    next();
+    
+    if(readToken(req)){
+        next();
+    }
 
     async function register({ username, password, repeatPassword }){
         if(username == '' || password == ''){
@@ -44,9 +47,24 @@ module.exports = () => (req, res, next) => {
 
     function createToken(user){
         const userViewModel = { _id: user._id, username: user.username };
-        const token = jwt.sign(userViewModel, 'my very secure secret');
-        res.cookie('SESSION_DATA', token, { httpOnly: true });
+        const token = jwt.sign(userViewModel, TOKEN_SECRET);
+        res.cookie(COOKIE_NAME, token, { httpOnly: true });
 
         return userViewModel;
+    }
+
+    function readToken(req){
+        const token = req.cookies[COOKIE_NAME];
+        if(token){
+            try {
+                const userData = jwt.verify(token, TOKEN_SECRET);
+                req.user = userData;
+                console.log('Know user', userData.username);
+            } catch (err) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }
