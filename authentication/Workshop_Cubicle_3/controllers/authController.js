@@ -32,6 +32,11 @@ router.post('/login', async (req, res) => {
             username: req.body.username || ''
         });
     }
-})
+});
+
+router.get('/logout', async (req, res) => {
+    await req.auth.logout();
+    res.redirect('/products');
+});
 
 module.exports = router;
