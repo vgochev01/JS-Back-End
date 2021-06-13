@@ -1,4 +1,7 @@
 const { Router } = require('express');
+const { isAuth, isAuthor } = require('../middlewares/guards');
+
+const { preloadCube } = require('../middlewares/preload');
 
 const router = Router();
 
@@ -14,10 +17,10 @@ router.get('/', async (req, res) => {
     res.render('index', ctx);
 });
 
-router.get('/details/:id', async (req, res) => {
-    const { id } = req.params;
-    const cube = await req.storage.getById(id);
-
+router.get('/details/:id', preloadCube, async (req, res) => {
+    const cube = req.data.cube;
+    cube.isOwner = cube.authorId == (req.user && req.user._id);
+    console.log(cube.isOwner);
     if(cube == undefined){
         return res.redirect('/404');
     } else {
@@ -29,19 +32,20 @@ router.get('/details/:id', async (req, res) => {
     }
 });
 
-router.get('/create', (req, res) => {
+router.get('/create', isAuth(), (req, res) => {
     const ctx = {
         title: 'Create Cube'
     }
-    res.render('create');
+    res.render('create', ctx);
 });
 
-router.post('/create', async (req, res) => {
+router.post('/create', isAuth(), async (req, res) => {
     const cube = {
         name: req.body.name,
         description: req.body.description,
         imageUrl: req.body.imageUrl,
-        difficulty: Number(req.body.difficulty)
+        difficulty: Number(req.body.difficulty),
+        author: req.user._id
     };
     
     try {
@@ -55,9 +59,8 @@ router.post('/create', async (req, res) => {
     res.redirect('/');
 });
 
-router.get('/edit/:id', async (req, res) => {
-    const { id } = req.params;
-    const cube = await req.storage.getById(id);
+router.get('/edit/:id', preloadCube, isAuthor(), async (req, res) => {
+    const cube = req.data.cube;
     cube[`select${cube.difficulty}`] = true;
 
     if(cube == undefined){
@@ -71,7 +74,7 @@ router.get('/edit/:id', async (req, res) => {
     }
 });
 
-router.post('/edit/:id', async (req, res) => {
+router.post('/edit/:id', preloadCube, isAuthor(), async (req, res) => {
     const { id } = req.params;
     const cube = {
         name: req.body.name,

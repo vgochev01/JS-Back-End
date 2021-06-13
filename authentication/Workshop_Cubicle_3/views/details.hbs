@@ -9,8 +9,10 @@
     {{description}}
   <p><span>Difficulty level:</span> {{difficulty}}</p>
   <a class="btn" href="/products">Back</a>
+  {{#if isOwner}}
   <a class="btn" href="/products/edit/{{_id}}">Edit</a>
   <a class="btn" href="/accessory/attach/{{_id}}">Attach</a>
+  {{/if}}
 
   {{!-- ACCESSORIES --}}
 
