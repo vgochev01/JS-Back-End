@@ -1,5 +1,7 @@
 const router = require('express').Router();
 
+const { isAuth } = require('../middlewares/guards');
+
 router.get('/', (req, res) => res.redirect('/products'));
 
 router.get('/about', (req, res) => {
@@ -9,15 +11,14 @@ router.get('/about', (req, res) => {
     res.render('about');
 });
 
-router.post('/comments/:cubeId', async (req, res) => {
+router.post('/comments/:cubeId', isAuth(), async (req, res) => {
     const { cubeId } = req.params;
     const comment = {
-        author: req.body.author,
+        author: req.user._id,
         content: req.body.content
     };
 
     await req.storage.newComment(cubeId, comment);
-    
     res.redirect('/products/details/' + cubeId);
 });
 

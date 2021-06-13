@@ -20,7 +20,7 @@ router.get('/', async (req, res) => {
 router.get('/details/:id', preloadCube, async (req, res) => {
     const cube = req.data.cube;
     cube.isOwner = cube.authorId == (req.user && req.user._id);
-    console.log(cube.isOwner);
+    
     if(cube == undefined){
         return res.redirect('/404');
     } else {

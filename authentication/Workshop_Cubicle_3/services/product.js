@@ -23,7 +23,7 @@ async function getAll(query){
 
 async function getById(id){
     try{
-        const cube = await Cube.findById(id).populate('comments').populate('accessories').populate('author').lean();
+        const cube = await Cube.findById(id).populate({ path: 'comments', populate: { path: 'author' } }).populate('accessories').populate('author').lean();
         if(cube) {
             const viewModel = {
                 _id: cube._id,
@@ -31,11 +31,12 @@ async function getById(id){
                 description: cube.description,
                 imageUrl: cube.imageUrl,
                 difficulty: cube.difficulty,
-                comments: cube.comments,
+                comments: cube.comments.map(c => ({ author: c.author.username, content: c.content })),
                 accessories: cube.accessories,
                 author: cube.author?.username,
                 authorId: cube.author?._id
             }
+            console.log(viewModel.comments);
             return viewModel;
         } else {
             throw new Error();
