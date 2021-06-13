@@ -20,7 +20,7 @@ router.get('/', async (req, res) => {
 router.get('/details/:id', preloadCube, async (req, res) => {
     const cube = req.data.cube;
     cube.isOwner = cube.authorId == (req.user && req.user._id);
-    
+
     if(cube == undefined){
         return res.redirect('/404');
     } else {
@@ -86,6 +86,26 @@ router.post('/edit/:id', preloadCube, isAuthor(), async (req, res) => {
     await req.storage.edit(id, cube);
 
     res.redirect('/products/details/' + id);
+});
+
+router.get('/delete/:id', preloadCube, isAuthor(), async (req, res) => {
+    const cube = req.data.cube;
+    cube[`select${cube.difficulty}`] = true;
+
+    if(cube == undefined){
+        res.redirect('/404');
+    } else {
+        const ctx = {
+            title: 'Delete Cube',
+            cube
+        }
+        res.render('delete', ctx);
+    }
+});
+
+router.post('/delete/:id', preloadCube, isAuthor(), async (req, res) => {
+    await req.storage.deleteCube(req.params.id);
+    res.redirect('/products');
 });
 
 module.exports = router;

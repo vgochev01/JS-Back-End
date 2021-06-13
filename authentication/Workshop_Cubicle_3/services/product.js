@@ -63,6 +63,14 @@ async function edit(id, cube) {
     return existing.save();
 }
 
+async function deleteCube(cubeId) {
+    try {
+        return Cube.deleteOne({ _id: cubeId });
+    } catch (err) {
+        throw new ReferenceError('No such ID in database!');
+    }
+}
+
 async function newComment(id, comment){
     const cube = await Cube.findById(id);
 
@@ -82,5 +90,6 @@ module.exports = {
     getById,
     create,
     edit,
+    deleteCube,
     newComment
 }
