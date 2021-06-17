@@ -2,6 +2,9 @@ const { Router } = require('express');
 const { isAuth, isAuthor } = require('../middlewares/guards');
 
 const { preloadCube } = require('../middlewares/preload');
+const { parseMongooseError } = require('../util/parse');
+
+const { body, validationResult } = require('express-validator');
 
 const router = Router();
 
@@ -39,7 +42,12 @@ router.get('/create', isAuth(), (req, res) => {
     res.render('create', ctx);
 });
 
-router.post('/create', isAuth(), async (req, res) => {
+router.post('/create',
+isAuth(),
+body('name').isLength({ min: 5 }).withMessage('Name must contain at least 5 characters!').matches(/^[a-zA-Z0-9 ]+$/).withMessage('Name must contain only latin alphanumeric characters and whitespaces!'),
+body('description').isLength({ min: 20 }).withMessage('Description must contain at least 20 characters!').matches(/^[a-zA-Z0-9 ]+$/).withMessage('Description must contain only latin alphanumeric characters and whitespaces!'),
+body('imageUrl').trim().not().isEmpty().withMessage('Image URL is required!').matches(/^https?:\/\//).withMessage('Please enter a valid image URL!'),
+async (req, res) => {
     const cube = {
         name: req.body.name,
         description: req.body.description,
@@ -49,11 +57,24 @@ router.post('/create', isAuth(), async (req, res) => {
     };
     
     try {
+        let errors = validationResult(req);
+        if(errors.isEmpty() == false){
+            errors = errors.mapped();
+            throw new Error(Object.values(errors).map(e => e.msg).join('\n'));
+        }
+
         await req.storage.create(cube);
     } catch (err) {
-        if(err.name == 'ValidationError') {
-            return res.render('create', { title: 'Create Cube', error: 'All fields are required. Image URL must be a valid URL.'});
+        const ctx = {
+            title: 'Create Cube'
         }
+        if(err.name == 'ValidationError') {
+            ctx.errors = parseMongooseError(err);
+        } else {
+            ctx.errors = err.message.split('\n');
+        }
+
+        return res.render('create', ctx);
     }
 
     res.redirect('/');
