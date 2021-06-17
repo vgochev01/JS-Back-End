@@ -27,10 +27,6 @@ module.exports = () => (req, res, next) => {
     };
 
     async function login({ username, password }){
-        if(username == '' || password == ''){
-            throw new Error('All fields are required!');
-        }
-
         const user = await userService.getUserByUsername(username);
         
         if(user){

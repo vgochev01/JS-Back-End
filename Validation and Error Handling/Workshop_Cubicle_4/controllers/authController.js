@@ -50,14 +50,22 @@ router.get("/login", isGuest(), (req, res) => {
   res.render("login", { title: "Login" });
 });
 
-router.post("/login", isGuest(), async (req, res) => {
+router.post("/login",
+isGuest(),
+body("username").trim().not().isEmpty(),
+body("password").trim().not().isEmpty(),
+async (req, res) => {
   try {
+      const errors = validationResult(req);
+      if(errors.isEmpty() == false){
+          throw new Error('Username and password are required!');
+      }
     await req.auth.login(req.body);
     res.redirect("/products");
   } catch (err) {
     res.render("login", {
       title: "Login",
-      error: err.message,
+      errors: [err.message],
       username: req.body.username || "",
     });
   }
