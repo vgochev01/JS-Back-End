@@ -7,8 +7,7 @@ async function createUser(username, hashedPassword){
 }
 
 async function getUserByUsername(username){
-    const user = await User.findOne({ username: { $regex: new RegExp(`^${username}$`, 'i') } });
-    return user;
+    return await User.findOne({ username: { $regex: new RegExp(`^${username}$`, 'i') } });
 }
 
 module.exports = {
