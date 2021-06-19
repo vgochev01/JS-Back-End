@@ -2,13 +2,14 @@
   <h2>Create your account:</h2>
   <form action="/auth/register" method="POST" id="formRegister">
     <label for="email">Email:</label>
-    <input type="text" id="email" name="email" placeholder="Email" />
+    <input type="text" id="email" name="email" placeholder="Email" value="{{userInput.email}}" />
     <label for="username">Username:</label>
     <input
       type="text"
       id="username"
       name="username"
       placeholder="Enter your Username"
+      value="{{userInput.username}}"
     />
     <label for="password">Password:</label>
     <input

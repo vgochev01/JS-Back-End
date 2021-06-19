@@ -10,6 +10,12 @@
 
     <div id="container">
 
+      {{#if errors}}
+      <div class="notification errorBox">
+        <span>{{errors}}</span>
+      </div>
+      {{/if}}
+
       <nav>
         {{#if user}}
           <div class="left-container">
