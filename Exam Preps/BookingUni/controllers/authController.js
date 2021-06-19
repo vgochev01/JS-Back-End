@@ -1,7 +1,8 @@
 const router = require('express').Router();
 const { body, validationResult } = require('express-validator');
+const { isGuest, isAuth } = require('../middlewares/guards');
 
-router.get('/register', (req, res) => {
+router.get('/register', isGuest(), (req, res) => {
     const ctx = {
         title: 'Register',
     };
@@ -9,6 +10,7 @@ router.get('/register', (req, res) => {
 });
 
 router.post('/register',
+    isGuest(),
     body('email').trim().isEmail().withMessage('Please enter a valid email address!'),
     body('password').trim().isLength({ min: 5 }).withMessage('The password should be at least 5 characters long!').bail().isAlphanumeric().withMessage('Password should consist only english letters and digits!'),
     body('rePass').custom((value, { req }) => {
@@ -42,7 +44,7 @@ router.post('/register',
         }
 });
 
-router.get('/login', (req, res) => {
+router.get('/login', isGuest(), (req, res) => {
     const ctx = {
         title: 'Login'
     };
@@ -50,6 +52,7 @@ router.get('/login', (req, res) => {
 });
 
 router.post('/login',
+    isGuest(),
     body('username').trim().not().isEmpty().withMessage('Username field is required!'),
     body('password').trim().not().isEmpty().withMessage('Password field is required!'),
     async(req, res) => {
@@ -80,7 +83,7 @@ router.post('/login',
         }
 });
 
-router.get('/logout', (req, res) => {
+router.get('/logout', isAuth(), (req, res) => {
     req.auth.logout();
     res.redirect('/');
 });
