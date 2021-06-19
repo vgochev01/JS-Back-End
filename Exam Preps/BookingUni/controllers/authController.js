@@ -1,7 +1,6 @@
 const router = require('express').Router();
 
 router.get('/register', (req, res) => {
-    console.log(req.user);
     const ctx = {
         title: 'Register'
     };
@@ -27,6 +26,24 @@ router.get('/login', (req, res) => {
         title: 'Login'
     };
     res.render('user/login', ctx);
+});
+
+router.post('/login', async(req, res) => {
+    const userInput = {
+        username: req.body.username,
+        password: req.body.password,
+    };
+    try{
+        await req.auth.login(userInput);
+        res.redirect('/');
+    } catch(err) {
+        console.log(err.message);
+    }
+});
+
+router.get('/logout', (req, res) => {
+    req.auth.logout();
+    res.redirect('/');
 });
 
 module.exports = router;
