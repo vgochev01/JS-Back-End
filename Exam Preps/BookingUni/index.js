@@ -12,6 +12,6 @@ async function start() {
     await databaseConfig(app);
     expressConfig(app);
     routesConfig(app);
-
+    
     app.listen(PORT, () => console.log(`App started on port ${PORT}!`));
 }
