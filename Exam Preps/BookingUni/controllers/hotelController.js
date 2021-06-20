@@ -49,4 +49,37 @@ router.get('/:id', preloadHotel, (req, res) => {
     res.render('booking/details', ctx);
 });
 
+router.get('/edit/:id', preloadHotel, isOwner(), async(req, res) => {
+    const ctx = {
+        title: 'Edit Hotel',
+        hotel: req.data.hotel
+    };
+    res.render('booking/edit', ctx);
+});
+
+router.post('/edit/:id', preloadHotel, isOwner(), async(req, res) => {
+    const { id } = req.params;
+    const data = {
+        name: req.body.name,
+        city: req.body.city,
+        imageUrl: req.body.imageUrl,
+        freeRooms: req.body.freeRooms
+    }
+    try {
+        await req.storage.editHotel(id, data);
+        res.redirect('/hotels/' + id);
+    } catch (err) {
+        if(err instanceof ReferenceError){
+            console.log(err.message);
+            return res.redirect('/');
+        }
+        const ctx = {
+            title: 'Edit Hotel',
+            errors: parseMongooseError(err)[0],
+            hotel: req.data.hotel
+        };
+        res.render('booking/edit', ctx);
+    }
+});
+
 module.exports = router;

@@ -1,7 +1,8 @@
 const router = require('express').Router();
 const { isAuth, notOwner } = require('../middlewares/guards');
+const { preloadHotel } = require('../middlewares/preload');
 
-router.get('/:id', notOwner(), async(req, res) => {
+router.get('/:id', preloadHotel, notOwner(), async(req, res) => {
     const { id } = req.params;
     try {
         await req.storage.bookHotel(id, req.user._id);

@@ -13,8 +13,21 @@ async function getHotelById(id){
     return Hotel.findById(id).populate('usersBooked').populate('owner').lean();
 }
 
+async function editHotel(id, data){
+    const existing = await Hotel.findById(id);
+
+    if(!existing){
+        throw new ReferenceError('No such ID in database!');
+    }
+
+    Object.assign(existing, data);
+
+    return existing.save();
+}
+
 module.exports = {
     createHotel,
     getAllHotels,
-    getHotelById
+    getHotelById,
+    editHotel
 }
