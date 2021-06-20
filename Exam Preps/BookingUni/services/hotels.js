@@ -13,10 +13,6 @@ async function getHotelById(id){
     return Hotel.findById(id).populate('usersBooked').populate('owner').lean();
 }
 
-async function bookHotel(id, user) {
-    
-}
-
 module.exports = {
     createHotel,
     getAllHotels,

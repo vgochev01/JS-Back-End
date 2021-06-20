@@ -4,8 +4,6 @@ async function preloadHotel(req, res, next){
     try {
         const hotel = await req.storage.getHotelById(id);
         if(hotel){
-            hotel.isLogged = req.user != undefined;
-            hotel.isOwner = (req.user && req.user._id) == hotel.owner._id;
             req.data.hotel = hotel;
         }
     } catch (err) {

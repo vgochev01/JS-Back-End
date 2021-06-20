@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const { isAuth } = require('../middlewares/guards');
+const { isAuth, isOwner } = require('../middlewares/guards');
 const { parseMongooseError } = require('../util/parse');
 const { preloadHotel } = require('../middlewares/preload');
 
@@ -36,9 +36,15 @@ router.post('/create', isAuth(), async (req, res) => {
 
 router.get('/:id', preloadHotel, (req, res) => {
     const hotel = req.data.hotel;
+    const isLogged = req.user != undefined;
+    const isOwner = (req.user && req.user._id) == hotel.owner._id;
+    const alreadyBooked = hotel.usersBooked.some(u => u._id == req.user._id);
     const ctx = {
         title: 'Details',
-        hotel
+        hotel,
+        isLogged,
+        isOwner,
+        alreadyBooked
     }
     res.render('booking/details', ctx);
 });
