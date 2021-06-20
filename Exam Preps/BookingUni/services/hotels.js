@@ -25,9 +25,18 @@ async function editHotel(id, data){
     return existing.save();
 }
 
+async function deleteHotel(id) {
+    try {
+        return Hotel.deleteOne({ _id: id });
+    } catch (err) {
+        throw new ReferenceError('No such ID in database!');
+    }
+}
+
 module.exports = {
     createHotel,
     getAllHotels,
     getHotelById,
-    editHotel
+    editHotel,
+    deleteHotel
 }

@@ -38,7 +38,7 @@ router.get('/:id', preloadHotel, (req, res) => {
     const hotel = req.data.hotel;
     const isLogged = req.user != undefined;
     const isOwner = (req.user && req.user._id) == hotel.owner._id;
-    const alreadyBooked = hotel.usersBooked.some(u => u._id == req.user._id);
+    const alreadyBooked = hotel.usersBooked.some(u => u._id == (req.user && req.user._id));
     const ctx = {
         title: 'Details',
         hotel,
@@ -80,6 +80,15 @@ router.post('/edit/:id', preloadHotel, isOwner(), async(req, res) => {
         };
         res.render('booking/edit', ctx);
     }
+});
+
+router.get('/delete/:id', preloadHotel, isOwner(), async(req, res) => {
+    try {
+        await req.storage.deleteHotel(req.params.id);
+    } catch (err) {
+        console.error(err.message);
+    }
+    res.redirect('/');
 });
 
 module.exports = router;
