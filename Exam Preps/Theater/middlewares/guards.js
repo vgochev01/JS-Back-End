@@ -31,8 +31,24 @@ function isOwner(){
     }
 }
 
+function notOwner() {
+    return (req, res, next) => {
+        if(req.user){
+            const isOwner = req.user._id == req.data.play.owner;
+            if(isOwner){
+                res.redirect('/plays/details/' + req.params.id);
+            } else {
+                next();
+            }
+        } else {
+            res.redirect('/auth/login');
+        }
+    }
+}
+
 module.exports = {
     isGuest,
     isAuth,
-    isOwner
+    isOwner,
+    notOwner
 }

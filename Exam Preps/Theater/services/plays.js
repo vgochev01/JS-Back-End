@@ -38,10 +38,27 @@ async function deletePlay(id){
     }
 }
 
+async function likePlay(id, userId){
+    try {
+        const existing = await Play.findById(id);
+        
+        if(existing){
+            existing.usersLiked.push(userId);
+            return existing.save();
+        } else {
+            throw new ReferenceError('No such ID in database!');
+        }
+
+    } catch (err) {
+        throw err;
+    }
+}
+
 module.exports = {
     createPlay,
     getAllPlays,
     getPlayById,
     editPlay,
-    deletePlay
+    deletePlay,
+    likePlay
 };

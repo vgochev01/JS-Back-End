@@ -1,4 +1,4 @@
-const { isAuth, isOwner } = require('../middlewares/guards');
+const { isAuth, isOwner, notOwner } = require('../middlewares/guards');
 const { preloadPlay } = require('../middlewares/preload');
 const { parseMongooseError } = require('../util/parse');
 
@@ -39,7 +39,7 @@ router.get('/details/:id', preloadPlay, async (req, res) => {
         title: 'Details',
         isUser: req.user != undefined,
         isOwner: req.user && req.user._id == play.owner,
-        hasLiked: play.usersLiked.includes(req.user && req.user._id),
+        hasLiked: play.usersLiked.some(u => u._id == req.user._id),
         play
     };
     res.render('theater/details', ctx);
@@ -86,6 +86,16 @@ router.get('/delete/:id', preloadPlay, isOwner(), async (req, res) => {
         console.error(err.message);
     }
     res.redirect('/');
+});
+
+router.get('/like/:id', preloadPlay, notOwner(), async (req, res) => {
+    try {
+        await req.storage.likePlay(req.params.id, req.user._id);
+        res.redirect('/plays/details/' + req.params.id);
+    } catch (err) {
+        console.error(err.message);
+        res.redirect('/');
+    }
 });
 
 module.exports = router;
