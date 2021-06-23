@@ -16,37 +16,23 @@ function isAuth() {
     }
 }
 
-// function isOwner(){
-//     return (req, res, next) => {
-//         if(req.user){
-//             const isOwner = req.user._id == req.data.hotel.owner._id;
-//             if(isOwner){
-//                 next();
-//             } else {
-//                 res.redirect('/hotels/' + req.params.id);
-//             }
-//         } else {
-//             res.redirect('/auth/login');
-//         }
-//     }
-// }
-
-// function notOwner(){
-//     return (req, res, next) => {
-//         if(req.user){
-//             const isOwner = req.user._id == req.data.hotel.owner._id;
-//             if(isOwner){
-//                 res.redirect('/hotels/' + req.params.id);
-//             } else {
-//                 next();
-//             }
-//         } else {
-//             res.redirect('/auth/login');
-//         }
-//     }
-// }
+function isOwner(){
+    return (req, res, next) => {
+        if(req.user){
+            const isOwner = req.user._id == req.data.play.owner;
+            if(isOwner){
+                next();
+            } else {
+                res.redirect('/plays/details/' + req.params.id);
+            }
+        } else {
+            res.redirect('/auth/login');
+        }
+    }
+}
 
 module.exports = {
     isGuest,
-    isAuth
+    isAuth,
+    isOwner
 }
