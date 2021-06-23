@@ -21,7 +21,7 @@ async function editPlay(id, playData) {
             Object.assign(existing, playData);
             return existing.save();
         } else {
-            const error = new Error('No such id in database!');
+            throw new ReferenceError('No such ID in database!');
         }
 
     } catch (err) {
@@ -30,9 +30,18 @@ async function editPlay(id, playData) {
     }
 }
 
+async function deletePlay(id){
+    try {
+        return Play.deleteOne({ _id: id });
+    } catch (err) {
+        throw new ReferenceError('No such ID in database!');
+    }
+}
+
 module.exports = {
     createPlay,
     getAllPlays,
     getPlayById,
-    editPlay
+    editPlay,
+    deletePlay
 };

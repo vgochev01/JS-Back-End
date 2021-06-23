@@ -66,7 +66,7 @@ router.post('/edit/:id', preloadPlay, isOwner(), async (req, res) => {
         res.redirect('/plays/details/' + req.params.id);
     } catch (err) {
 
-        if(err.message == 'No such id in database!'){
+        if(err instanceof ReferenceError){
             return res.redirect('/');
         }
 
@@ -74,9 +74,18 @@ router.post('/edit/:id', preloadPlay, isOwner(), async (req, res) => {
             errors: parseMongooseError(err),
             play: req.data.play
         };
-        
+
         res.render('theater/edit', ctx);
     }
+});
+
+router.get('/delete/:id', preloadPlay, isOwner(), async (req, res) => {
+    try {
+        await req.storage.deletePlay(req.params.id);
+    } catch (err) {
+        console.error(err.message);
+    }
+    res.redirect('/');
 });
 
 module.exports = router;
