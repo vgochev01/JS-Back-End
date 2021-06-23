@@ -1,4 +1,3 @@
-{{#with play}}
 <div>
   <div class="home-image">
     <img
@@ -10,8 +9,7 @@
     <h4>{{name}}</h4>
     <div class="info-buttons">
       <a class="btn details" href="/plays/details/{{_id}}">Details</a>
-      <span class="likes">0 likes</span>
+      <span class="likes">{{usersLiked.length}} likes</span>
     </div>
   </div>
 </div>
-{{/with}}

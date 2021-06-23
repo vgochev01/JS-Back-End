@@ -25,6 +25,10 @@ const schema = new Schema({
     usersLiked: {
         type: [{ type: Schema.Types.ObjectId, ref: 'User' }],
         default: []
+    },
+    owner: {
+        type: Schema.Types.ObjectId,
+        ref: 'User'
     }
 });
 

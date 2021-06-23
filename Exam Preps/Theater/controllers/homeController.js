@@ -1,7 +1,7 @@
 const router = require('express').Router();
 
-router.get('/', (req, res) => {
-    const plays = [];
+router.get('/', async (req, res) => {
+    const plays = await req.storage.getAllPlays();
     const ctx = {
         title: 'Home',
         plays

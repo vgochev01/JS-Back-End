@@ -6,7 +6,7 @@ async function createPlay(playData){
 }
 
 async function getAllPlays(orderBy){
-    return Play.find({}).lean();
+    return Play.find({ public: true }).lean();
 }
 
 async function getPlayById(id){
