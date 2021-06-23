@@ -6,6 +6,9 @@ async function createPlay(playData){
 }
 
 async function getAllPlays(orderBy){
+    if(orderBy == 'likes') {
+        return Play.find({ public: true }).sort({ usersLiked: 'desc' }).lean();
+    }
     return Play.find({ public: true }).lean();
 }
 
