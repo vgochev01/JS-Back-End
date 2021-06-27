@@ -39,7 +39,7 @@ router.get('/details/:id', preloadPlay, async (req, res) => {
         title: 'Details',
         isUser: req.user != undefined,
         isOwner: req.user && req.user._id == play.owner,
-        hasLiked: play.usersLiked.some(u => u._id == req.user._id),
+        hasLiked: play.usersLiked.some(u => u._id == req.user?._id),
         play
     };
     res.render('theater/details', ctx);
