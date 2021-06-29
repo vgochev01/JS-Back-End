@@ -1,7 +1,7 @@
 import * as api from './api.js';
 
 
-const host = 'http://localhost:3030';
+const host = 'http://localhost:5000';
 api.settings.host = host;
 
 export const login = api.login;
