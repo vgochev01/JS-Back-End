@@ -33,6 +33,10 @@ const schema = new Schema({
     },
     material: {
         type: String
+    },
+    owner: {
+        type: Schema.Types.ObjectId,
+        ref: 'User'
     }
 });
 
