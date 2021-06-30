@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const { isAuth, isOwner } = require('../middlewares/guards');
 const preload = require('../middlewares/preload');
+const { parseMongooseError } = require('../util/parse');
 
 router.post('/', async(req, res) => {
     const data = {
@@ -17,8 +18,11 @@ router.post('/', async(req, res) => {
         const result = await req.storage.create(data);
         res.json(result);
     } catch (err) {
-        console.log(err);
-        res.end();
+        let message = err.message;
+        if(err.name == 'ValidationError'){
+            message = parseMongooseError(err)[0];
+        }
+        res.status(err.status || 400).json({ message });
     }
 });
 
@@ -53,7 +57,11 @@ router.put('/:id', isAuth(), preload, isOwner(), async(req, res) => {
         const result = await req.storage.edit(req.data, data);
         res.json(result);
     } catch (err) {
-        res.status(err.status || 400).json({ message: err.message });
+        let message = err.message;
+        if(err.name == 'ValidationError'){
+            message = parseMongooseError(err)[0];
+        }
+        res.status(err.status || 400).json({ message });
     }
 });
 
