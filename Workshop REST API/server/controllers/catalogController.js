@@ -23,7 +23,12 @@ router.post('/', async(req, res) => {
 });
 
 router.get('/', async(req, res) => {
-    const data = await req.storage.getAll();
+    let query = req.query.where;
+    let ownerId;
+    if(query){
+        ownerId = query.split('=')[1];
+    }
+    const data = await req.storage.getAll(ownerId);
     res.json(data);
 });
 

@@ -6,8 +6,12 @@ async function create(data){
     return furniture;
 }
 
-async function getAll(){
-    return Furniture.find({}).lean();
+async function getAll(ownerId){
+    let query = {};
+    if(ownerId){
+        query = { owner: ownerId };
+    }
+    return Furniture.find(query).lean();
 }
 
 async function getById(id){
