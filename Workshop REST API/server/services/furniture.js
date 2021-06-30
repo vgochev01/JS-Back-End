@@ -2,7 +2,8 @@ const Furniture = require('../models/Furniture');
 
 async function create(data){
     const furniture = new Furniture(data);
-    return furniture.save();
+    await furniture.save();
+    return furniture;
 }
 
 async function getAll(){
@@ -10,11 +11,32 @@ async function getAll(){
 }
 
 async function getById(id){
-    return Furniture.findById(id).lean();
+    try {
+        const data = await Furniture.findById(id).populate('owner');
+        return data;
+    } catch (err) {
+        throw new Error('Database Error');
+    }
+}
+
+async function edit(existing, updated) {
+    Object.assign(existing, updated);
+    await existing.save();
+    return existing;
+}
+
+async function deleteItem(id){
+    try {
+        await Furniture.findByIdAndDelete(id);
+    } catch (err) {
+        throw new Error('No such id in database!');
+    }
 }
 
 module.exports = {
     create,
     getAll,
-    getById
+    getById,
+    edit,
+    deleteItem
 }

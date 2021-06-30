@@ -1,10 +1,8 @@
+const { isGuest } = require('../middlewares/guards');
+
 const router = require('express').Router();
 
-router.get('/', (req, res) => {
-    res.json({ message: 'It works!' });
-});
-
-router.post('/register', async (req, res) => {
+router.post('/register', isGuest() , async (req, res) => {
     try {
         const userData = await req.auth.register(req.body.email, req.body.password);
         res.json(userData);
@@ -14,7 +12,7 @@ router.post('/register', async (req, res) => {
     }
 });
 
-router.post('/login', async(req, res) => {
+router.post('/login', isGuest(), async(req, res) => {
     try {
         const userData = await req.auth.login(req.body.email, req.body.password);
         res.json(userData);

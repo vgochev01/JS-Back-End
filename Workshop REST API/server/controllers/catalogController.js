@@ -1,4 +1,5 @@
 const router = require('express').Router();
+const { isAuth, isOwner } = require('../middlewares/guards');
 const preload = require('../middlewares/preload');
 
 router.post('/', async(req, res) => {
@@ -29,11 +30,10 @@ router.get('/', async(req, res) => {
 router.get('/:id', preload, async(req, res) => {
     const data = req.data.toObject();
     data._ownerId = data.owner._id;
-    console.log(data);
     res.json(data);
 });
 
-router.put('/:id', preload, async(req, res) => {
+router.put('/:id', isAuth(), preload, isOwner(), async(req, res) => {
     const data = {
         make: req.body.make,
         model: req.body.model,
@@ -45,8 +45,17 @@ router.put('/:id', preload, async(req, res) => {
     }
 
     try {
-        await req.storage.edit()
-        
+        const result = await req.storage.edit(req.data, data);
+        res.json(result);
+    } catch (err) {
+        res.status(err.status || 400).json({ message: err.message });
+    }
+});
+
+router.delete('/:id', isAuth(), preload, isOwner(), async(req, res) => {
+    try {
+        await req.storage.deleteItem(req.params.id);
+        res.json({});
     } catch (err) {
         res.status(err.status || 400).json({ message: err.message });
     }

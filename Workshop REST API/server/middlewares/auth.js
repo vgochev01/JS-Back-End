@@ -65,8 +65,15 @@ async function login(email, password){
 }
 
 module.exports = () => (req, res, next) => {
-
-    console.log(req.headers);
+    const token = req.headers['x-authorization'];
+    if(token){
+        try {
+            const userData = jwt.verify(token, TOKEN_SECRET);
+            req.user = userData;
+        } catch (err) {
+            return res.status(401).json({ message: 'Please sign-in!' });
+        }
+    }
 
     req.auth = {
         register,
